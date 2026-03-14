@@ -1,7 +1,7 @@
 """Composable tool registry and system prompt builder.
 
 ToolRegistry: Plugin-style tool composition -- each module (base tools, memory,
-cron, node) creates its own registry, then merges them together.
+node) creates its own registry, then merges them together.
 
 SystemPromptBuilder: Section-based prompt construction -- each module adds its
 own prompt section, and they're concatenated in registration order.

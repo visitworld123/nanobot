@@ -5,8 +5,10 @@ Usage:
   python -m nanobot --repl           Basic REPL (s03 mode)
   python -m nanobot --routing        Routing REPL (s05 mode)
   python -m nanobot --soul           Soul+Memory REPL (s06 mode)
+  python -m nanobot --node           Node REPL (s09 mode)
   python -m nanobot --gateway        Start WebSocket gateway (s05)
   python -m nanobot --soul-gateway   Start Soul+Memory gateway (s06)
+  python -m nanobot --node-gateway   Start Node gateway (s09)
 """
 
 from __future__ import annotations
@@ -21,8 +23,10 @@ def main() -> None:
     group.add_argument("--repl", action="store_true", help="Basic REPL (s03)")
     group.add_argument("--routing", action="store_true", help="Routing REPL (s05)")
     group.add_argument("--soul", action="store_true", help="Soul+Memory REPL (s06)")
+    group.add_argument("--node", action="store_true", help="Node REPL (s09)")
     group.add_argument("--gateway", action="store_true", help="WebSocket gateway (s05)")
     group.add_argument("--soul-gateway", action="store_true", help="Soul+Memory gateway (s06)")
+    group.add_argument("--node-gateway", action="store_true", help="Node gateway (s09)")
 
     args = parser.parse_args()
 
@@ -32,6 +36,9 @@ def main() -> None:
     elif args.soul:
         from nanobot.repl.repl import run_soul_memory_repl
         run_soul_memory_repl()
+    elif args.node:
+        from nanobot.repl.repl import run_node_repl
+        run_node_repl()
     elif args.gateway:
         import asyncio
         import os
@@ -63,6 +70,22 @@ def main() -> None:
         port = int(os.getenv("GATEWAY_PORT", "18789"))
         token = os.getenv("GATEWAY_TOKEN", "")
         gw = SoulMemoryGateway(host, port, router, sessions, agents, token)
+        asyncio.run(gw.start())
+    elif args.node_gateway:
+        import asyncio
+        import os
+        from nanobot.soul.prompt import create_agents_with_soul_memory
+        from nanobot.routing.router import MessageRouter
+        from nanobot.node.gateway import NodeGateway
+        from nanobot.store.store import SessionStore
+
+        agents, bindings, default_agent, dm_scope = create_agents_with_soul_memory()
+        router = MessageRouter(agents, bindings, default_agent, dm_scope)
+        sessions = SessionStore()
+        host = os.getenv("GATEWAY_HOST", "127.0.0.1")
+        port = int(os.getenv("GATEWAY_PORT", "18789"))
+        token = os.getenv("GATEWAY_TOKEN", "")
+        gw = NodeGateway(host, port, router, sessions, agents, token)
         asyncio.run(gw.start())
     else:
         from nanobot.repl.repl import run_basic_repl
