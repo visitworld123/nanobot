@@ -1,70 +1,108 @@
-"""Tool registry for dynamic tool management."""
+"""Composable tool registry and system prompt builder.
 
-from typing import Any
+ToolRegistry: Plugin-style tool composition -- each module (base tools, memory,
+cron, node) creates its own registry, then merges them together.
 
-from nanobot.agent.tools.base import Tool
+SystemPromptBuilder: Section-based prompt construction -- each module adds its
+own prompt section, and they're concatenated in registration order.
+
+Reference: OpenClaw src/agents/tools/ plugin architecture
+Reference: OpenClaw src/agents/system-prompt.ts buildAgentSystemPrompt()
+"""
+
+from __future__ import annotations
+
+from typing import Any, Callable
 
 
 class ToolRegistry:
+    """Composable tool registry.
+
+    Each module can create its own ToolRegistry, then merge via merge().
+
+    Usage:
+        base = ToolRegistry.from_definitions(TOOLS_OPENAI, TOOL_HANDLERS)
+        memory_reg = ToolRegistry()
+        memory_reg.register("memory_search", spec, handler)
+        all_tools = base.merge(memory_reg)
     """
-    Registry for agent tools.
 
-    Allows dynamic registration and execution of tools.
-    """
+    def __init__(self) -> None:
+        self._specs: list[dict] = []
+        self._handlers: dict[str, Callable] = {}
 
-    def __init__(self):
-        self._tools: dict[str, Tool] = {}
-
-    def register(self, tool: Tool) -> None:
-        """Register a tool."""
-        self._tools[tool.name] = tool
-
-    def unregister(self, name: str) -> None:
-        """Unregister a tool by name."""
-        self._tools.pop(name, None)
-
-    def get(self, name: str) -> Tool | None:
-        """Get a tool by name."""
-        return self._tools.get(name)
-
-    def has(self, name: str) -> bool:
-        """Check if a tool is registered."""
-        return name in self._tools
-
-    def get_definitions(self) -> list[dict[str, Any]]:
-        """Get all tool definitions in OpenAI format."""
-        return [tool.to_schema() for tool in self._tools.values()]
-
-    async def execute(self, name: str, params: dict[str, Any]) -> str:
-        """Execute a tool by name with given parameters."""
-        _HINT = "\n\n[Analyze the error above and try a different approach.]"
-
-        tool = self._tools.get(name)
-        if not tool:
-            return f"Error: Tool '{name}' not found. Available: {', '.join(self.tool_names)}"
-
-        try:
-            # Attempt to cast parameters to match schema types
-            params = tool.cast_params(params)
-            
-            # Validate parameters
-            errors = tool.validate_params(params)
-            if errors:
-                return f"Error: Invalid parameters for tool '{name}': " + "; ".join(errors) + _HINT
-            result = await tool.execute(**params)
-            if isinstance(result, str) and result.startswith("Error"):
-                return result + _HINT
-            return result
-        except Exception as e:
-            return f"Error executing {name}: {str(e)}" + _HINT
+    def register(self, name: str, spec: dict, handler: Callable[..., str]) -> None:
+        """Register a tool: definition (OpenAI function spec) + handler."""
+        self._specs.append(spec)
+        self._handlers[name] = handler
 
     @property
-    def tool_names(self) -> list[str]:
-        """Get list of registered tool names."""
-        return list(self._tools.keys())
+    def specs(self) -> list[dict]:
+        """All tool definitions in OpenAI function-calling format."""
+        return list(self._specs)
 
-    def __len__(self) -> int:
-        return len(self._tools)
+    def handle(self, tool_name: str, args: dict) -> str | None:
+        """Dispatch a tool call. Returns result string; None if not registered."""
+        handler = self._handlers.get(tool_name)
+        if handler is None:
+            return None
+        try:
+            return handler(**args)
+        except TypeError as exc:
+            return f"Error: Invalid arguments for {tool_name}: {exc}"
+        except Exception as exc:
+            return f"Error: {tool_name} failed: {exc}"
 
-    def __contains__(self, name: str) -> bool:
-        return name in self._tools
+    def merge(self, other: ToolRegistry) -> ToolRegistry:
+        """Merge another ToolRegistry, returning a new combined one."""
+        merged = ToolRegistry()
+        merged._specs = self._specs + other._specs
+        merged._handlers = {**self._handlers, **other._handlers}
+        return merged
+
+    @staticmethod
+    def from_definitions(specs: list[dict], handlers: dict[str, Callable]) -> ToolRegistry:
+        """Create a ToolRegistry from existing specs and handlers."""
+        reg = ToolRegistry()
+        reg._specs = list(specs)
+        reg._handlers = dict(handlers)
+        return reg
+
+
+class SystemPromptBuilder:
+    """Section-based system prompt builder.
+
+    Each module adds its own prompt section; build() concatenates them.
+
+    Usage:
+        builder = SystemPromptBuilder()
+        builder.add_section("base", lambda agent, _: base_prompt)
+        builder.add_section("personality", lambda agent, _: f"You are {agent.system_prompt}")
+        prompt = builder.build(agent, base_prompt)
+    """
+
+    def __init__(self) -> None:
+        self._sections: list[tuple[str, Callable]] = []
+
+    def add_section(self, name: str, builder: Callable[..., str]) -> None:
+        """Add a prompt section. builder(agent, base_prompt) -> str."""
+        self._sections.append((name, builder))
+
+    def build(self, agent: Any, base_prompt: str) -> str:
+        """Build full system prompt by concatenating all sections."""
+        parts = []
+        for _name, builder in self._sections:
+            section = builder(agent, base_prompt)
+            if section:
+                parts.append(section)
+        return "\n".join(parts)
+
+    @staticmethod
+    def default() -> SystemPromptBuilder:
+        """Create default builder (base + personality)."""
+        b = SystemPromptBuilder()
+        b.add_section("base", lambda agent, base: base)
+        b.add_section("personality", lambda agent, _: (
+            f"\nPersonality: {agent.system_prompt}" if agent.system_prompt else ""
+        ))
+        return b

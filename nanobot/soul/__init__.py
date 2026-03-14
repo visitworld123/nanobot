@@ -1,38 +1,46 @@
-"""Soul & Memory system for nanobot agents.
+"""Soul & Memory system.
 
-Provides agent personality (Soul) and persistent memory with hybrid search.
+Provides workspace bootstrap (SOUL.md), memory management (MEMORY.md + daily logs),
+hybrid search (TF-IDF + BM25), memory tools, and soul prompt builder.
 
-Modules:
-  workspace: Agent workspace management (SOUL.md, MEMORY.md, memory/)
-  search:    TF-IDF + BM25 hybrid memory search
-  tools:     Memory tools (memory_search, memory_get, memory_write)
-  prompt:    System prompt builder with soul/memory injection
-  gateway:   WebSocket gateway server with soul/memory support
-  repl:      Interactive REPL for testing
+Reference: OpenClaw s06_soul_memory.py
 """
 
-from nanobot.soul.workspace import AgentWorkspace, load_bootstrap_files
-from nanobot.soul.search import MemorySearchIndex
-from nanobot.soul.tools import (
-    MemoryManager,
-    MemorySearchTool,
-    MemoryGetTool,
-    MemoryWriteTool,
-    register_memory_tools,
-    get_memory_manager,
+from nanobot.soul.workspace import (
+    AgentWithSoulMemory,
+    load_workspace_bootstrap_files,
+    BOOTSTRAP_MAX_CHARS,
+    BOOTSTRAP_TOTAL_MAX_CHARS,
 )
-from nanobot.soul.prompt import SoulPromptBuilder, build_soul_system_prompt
+from nanobot.soul.search import MemoryIndexManager, get_memory_manager
+from nanobot.soul.tools import (
+    build_memory_tools,
+    handle_memory_tool,
+    MEMORY_TOOL_NAMES,
+)
+from nanobot.soul.prompt import (
+    build_agent_system_prompt,
+    build_soul_memory_prompt_builder,
+    build_soul_memory_registry,
+    run_agent_with_soul_and_memory,
+    create_agents_with_soul_memory,
+    MEMORY_FLUSH_PROMPT,
+)
 
 __all__ = [
-    "AgentWorkspace",
-    "load_bootstrap_files",
-    "MemorySearchIndex",
-    "MemoryManager",
-    "MemorySearchTool",
-    "MemoryGetTool",
-    "MemoryWriteTool",
-    "register_memory_tools",
+    "AgentWithSoulMemory",
+    "load_workspace_bootstrap_files",
+    "BOOTSTRAP_MAX_CHARS",
+    "BOOTSTRAP_TOTAL_MAX_CHARS",
+    "MemoryIndexManager",
     "get_memory_manager",
-    "SoulPromptBuilder",
-    "build_soul_system_prompt",
+    "build_memory_tools",
+    "handle_memory_tool",
+    "MEMORY_TOOL_NAMES",
+    "build_agent_system_prompt",
+    "build_soul_memory_prompt_builder",
+    "build_soul_memory_registry",
+    "run_agent_with_soul_and_memory",
+    "create_agents_with_soul_memory",
+    "MEMORY_FLUSH_PROMPT",
 ]

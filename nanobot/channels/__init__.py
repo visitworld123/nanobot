@@ -1,6 +1,12 @@
-"""Chat channels module with plugin architecture."""
+"""Multi-channel abstraction layer.
 
-from nanobot.channels.base import BaseChannel
-from nanobot.channels.manager import ChannelManager
+Provides Channel ABC, CLIChannel, FileChannel, and ChannelRegistry.
+Reference: OpenClaw s04_multi_channel.py
+"""
 
-__all__ = ["BaseChannel", "ChannelManager"]
+from nanobot.channels.base import Channel
+from nanobot.channels.cli import CLIChannel
+from nanobot.channels.file import FileChannel
+from nanobot.channels.registry import ChannelRegistry
+
+__all__ = ["Channel", "CLIChannel", "FileChannel", "ChannelRegistry"]

@@ -1,5 +1,5 @@
-"""Session management module."""
+"""Session persistence."""
 
-from nanobot.session.manager import Session, SessionManager
+from nanobot.session.store import SessionStore
 
-__all__ = ["SessionManager", "Session"]
+__all__ = ["SessionStore"]

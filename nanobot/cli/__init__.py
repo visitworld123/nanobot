@@ -1,1 +1,1 @@
-"""CLI module for nanobot."""
+"""CLI entry points and REPL modes."""

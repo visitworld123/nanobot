@@ -1,6 +1,5 @@
-"""Message bus module for decoupled channel-agent communication."""
+"""Message bus: standardized inbound message format."""
 
-from nanobot.bus.events import InboundMessage, OutboundMessage
-from nanobot.bus.queue import MessageBus
+from nanobot.bus.events import InboundMessage
 
-__all__ = ["MessageBus", "InboundMessage", "OutboundMessage"]
+__all__ = ["InboundMessage"]
