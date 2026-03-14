@@ -1,6 +1,6 @@
 """Shared utilities."""
 
-from nanobot.utils.helpers import (
+from nanobot.base.helpers import (
     WORKSPACE_DIR,
     ALLOWED_ROOT,
     MAX_TOOL_OUTPUT,

@@ -1,13 +1,13 @@
-"""Tests for nanobot.agent.tools — definitions, registry, and tool dispatch."""
+"""Tests for nanobot.engine.tools — definitions, registry, and tool dispatch."""
 
 import pytest
 
-from nanobot.agent.tools.definitions import (
+from nanobot.engine.tools.definitions import (
     TOOLS, TOOLS_OPENAI, TOOL_HANDLERS,
     process_tool_call, tools_to_openai_format,
     tool_get_current_time, tool_read_file, tool_write_file,
 )
-from nanobot.agent.tools.registry import ToolRegistry, SystemPromptBuilder
+from nanobot.engine.tools.registry import ToolRegistry, SystemPromptBuilder
 
 
 class TestToolDefinitions:
@@ -106,7 +106,7 @@ class TestSystemPromptBuilder:
         assert result == "Base prompt"
 
     def test_default_builder(self):
-        from nanobot.config.loader import AgentConfig
+        from nanobot.routing.config import AgentConfig
         agent = AgentConfig(id="test", model="m", system_prompt="Be helpful")
         pb = SystemPromptBuilder.default()
         result = pb.build(agent, "System prompt base")

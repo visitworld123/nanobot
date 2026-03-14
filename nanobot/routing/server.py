@@ -13,14 +13,14 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
-from nanobot.gateway.protocol import (
+from nanobot.routing.protocol import (
     JSONRPC_VERSION, PARSE_ERROR, INVALID_REQUEST,
     METHOD_NOT_FOUND, INTERNAL_ERROR, AUTH_ERROR,
     make_result, make_error, make_event,
 )
-from nanobot.gateway.routing import MessageRouter
-from nanobot.agent.loop import run_agent_with_tools
-from nanobot.providers.llm_client import LLMClientError
+from nanobot.routing.router import MessageRouter
+from nanobot.engine.loop import run_agent_with_tools
+from nanobot.llm.llm_client import LLMClientError
 
 log = logging.getLogger("gateway")
 

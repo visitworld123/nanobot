@@ -7,8 +7,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from nanobot.bus.events import InboundMessage
-from nanobot.channels.base import Channel
+from nanobot.transport.events import InboundMessage
+from nanobot.transport.base import Channel
 
 
 class ChannelRegistry:
@@ -57,7 +57,7 @@ def gateway_poll_once(
     2. Process each message
     3. Return processed count
     """
-    from nanobot.agent.loop import agent_loop
+    from nanobot.engine.loop import agent_loop
 
     messages = registry.poll_all()
     processed = 0

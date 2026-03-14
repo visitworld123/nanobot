@@ -8,8 +8,8 @@ Exports:
     tools_to_openai_format: Convert tool schemas
 """
 
-from nanobot.agent.tools.registry import ToolRegistry, SystemPromptBuilder
-from nanobot.agent.tools.definitions import (
+from nanobot.engine.tools.registry import ToolRegistry, SystemPromptBuilder
+from nanobot.engine.tools.definitions import (
     TOOLS,
     TOOLS_OPENAI,
     TOOL_HANDLERS,

@@ -1,9 +1,9 @@
-"""Tests for nanobot.gateway — protocol helpers and RoutingGateway basics."""
+"""Tests for nanobot.routing — protocol helpers and RoutingGateway basics."""
 
 import json
 import pytest
 
-from nanobot.gateway.protocol import (
+from nanobot.routing.protocol import (
     JSONRPC_VERSION,
     PARSE_ERROR, INVALID_REQUEST, METHOD_NOT_FOUND,
     INTERNAL_ERROR, AUTH_ERROR,

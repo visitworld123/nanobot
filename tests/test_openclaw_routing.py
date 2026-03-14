@@ -1,11 +1,11 @@
-"""Tests for nanobot.config and nanobot.gateway.routing — AgentConfig, Binding, MessageRouter."""
+"""Tests for nanobot.routing and nanobot.routing.router — AgentConfig, Binding, MessageRouter."""
 
 import json
 import pytest
 from pathlib import Path
 
-from nanobot.config.loader import AgentConfig, Binding, load_routing_config, DEFAULT_CONFIG
-from nanobot.gateway.routing import MessageRouter, build_session_key
+from nanobot.routing.config import AgentConfig, Binding, load_routing_config, DEFAULT_CONFIG
+from nanobot.routing.router import MessageRouter, build_session_key
 
 
 class TestAgentConfig:

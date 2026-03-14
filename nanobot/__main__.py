@@ -27,18 +27,18 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.routing:
-        from nanobot.cli.repl import run_routing_repl
+        from nanobot.repl.repl import run_routing_repl
         run_routing_repl()
     elif args.soul:
-        from nanobot.cli.repl import run_soul_memory_repl
+        from nanobot.repl.repl import run_soul_memory_repl
         run_soul_memory_repl()
     elif args.gateway:
         import asyncio
         import os
-        from nanobot.config.loader import load_routing_config
-        from nanobot.gateway.routing import MessageRouter
-        from nanobot.gateway.server import RoutingGateway
-        from nanobot.session.store import SessionStore
+        from nanobot.routing.config import load_routing_config
+        from nanobot.routing.router import MessageRouter
+        from nanobot.routing.server import RoutingGateway
+        from nanobot.store.store import SessionStore
 
         agents, bindings, default_agent, dm_scope = load_routing_config()
         router = MessageRouter(agents, bindings, default_agent, dm_scope)
@@ -52,9 +52,9 @@ def main() -> None:
         import asyncio
         import os
         from nanobot.soul.prompt import create_agents_with_soul_memory
-        from nanobot.gateway.routing import MessageRouter
+        from nanobot.routing.router import MessageRouter
         from nanobot.soul.gateway import SoulMemoryGateway
-        from nanobot.session.store import SessionStore
+        from nanobot.store.store import SessionStore
 
         agents, bindings, default_agent, dm_scope = create_agents_with_soul_memory()
         router = MessageRouter(agents, bindings, default_agent, dm_scope)
@@ -65,7 +65,7 @@ def main() -> None:
         gw = SoulMemoryGateway(host, port, router, sessions, agents, token)
         asyncio.run(gw.start())
     else:
-        from nanobot.cli.repl import run_basic_repl
+        from nanobot.repl.repl import run_basic_repl
         run_basic_repl()
 
 

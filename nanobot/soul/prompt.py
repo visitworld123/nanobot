@@ -9,8 +9,8 @@ import logging
 from datetime import date
 from typing import Any, Callable
 
-from nanobot.config.loader import AgentConfig
-from nanobot.agent.tools.registry import ToolRegistry, SystemPromptBuilder
+from nanobot.routing.config import AgentConfig
+from nanobot.engine.tools.registry import ToolRegistry, SystemPromptBuilder
 from nanobot.soul.workspace import (
     AgentWithSoulMemory,
     load_workspace_bootstrap_files,
@@ -106,7 +106,7 @@ def build_agent_system_prompt(agent: AgentWithSoulMemory, base_prompt: str) -> s
 
 def build_soul_memory_registry(agent: AgentWithSoulMemory) -> ToolRegistry:
     """Create ToolRegistry with base tools + memory tools."""
-    from nanobot.agent.tools.definitions import TOOLS_OPENAI, TOOL_HANDLERS
+    from nanobot.engine.tools.definitions import TOOLS_OPENAI, TOOL_HANDLERS
 
     base = ToolRegistry.from_definitions(TOOLS_OPENAI, TOOL_HANDLERS)
     memory_reg = ToolRegistry()
@@ -131,7 +131,7 @@ def run_agent_with_soul_and_memory(
     user_text: str,
 ) -> str:
     """Process one user turn with Soul+Memory integration."""
-    from nanobot.agent.loop import run_agent_with_tools
+    from nanobot.engine.loop import run_agent_with_tools
 
     registry = build_soul_memory_registry(agent)
     prompt_builder = build_soul_memory_prompt_builder(agent)
@@ -150,7 +150,7 @@ def create_agents_with_soul_memory(
     config_path: str | None = None,
 ) -> tuple[dict[str, AgentWithSoulMemory], list, str, str]:
     """Load agents from config and upgrade to AgentWithSoulMemory."""
-    from nanobot.config.loader import load_routing_config
+    from nanobot.routing.config import load_routing_config
 
     agents, bindings, default_agent, dm_scope = load_routing_config(config_path)
 

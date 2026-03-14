@@ -1,6 +1,6 @@
 """LLM provider abstraction."""
 
-from nanobot.providers.llm_client import (
+from nanobot.llm.llm_client import (
     deepseek_chat_with_tools,
     LLMClientConfig,
     LLMClientError,

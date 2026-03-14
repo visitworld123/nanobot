@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from nanobot.bus.events import InboundMessage
+from nanobot.transport.events import InboundMessage
 
 
 class Channel(ABC):

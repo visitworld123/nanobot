@@ -5,8 +5,8 @@ Reference: OpenClaw s04_multi_channel.py CLIChannel
 
 from __future__ import annotations
 
-from nanobot.bus.events import InboundMessage
-from nanobot.channels.base import Channel
+from nanobot.transport.events import InboundMessage
+from nanobot.transport.base import Channel
 
 
 class CLIChannel(Channel):

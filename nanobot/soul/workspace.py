@@ -12,8 +12,8 @@ import logging
 from dataclasses import dataclass
 from pathlib import Path
 
-from nanobot.config.loader import AgentConfig
-from nanobot.utils.helpers import WORKSPACE_DIR
+from nanobot.routing.config import AgentConfig
+from nanobot.base.helpers import WORKSPACE_DIR
 
 log = logging.getLogger("soul")
 

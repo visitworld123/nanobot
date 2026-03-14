@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import logging
 
-from nanobot.config.loader import AgentConfig, Binding
+from nanobot.routing.config import AgentConfig, Binding
 
 log = logging.getLogger("routing")
 

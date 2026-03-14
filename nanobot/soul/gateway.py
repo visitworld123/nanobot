@@ -11,10 +11,10 @@ import asyncio
 import logging
 from typing import Any
 
-from nanobot.gateway.server import RoutingGateway, ConnectedClient
-from nanobot.gateway.protocol import make_event
-from nanobot.gateway.routing import MessageRouter
-from nanobot.providers.llm_client import LLMClientError
+from nanobot.routing.server import RoutingGateway, ConnectedClient
+from nanobot.routing.protocol import make_event
+from nanobot.routing.router import MessageRouter
+from nanobot.llm.llm_client import LLMClientError
 from nanobot.soul.workspace import AgentWithSoulMemory
 from nanobot.soul.search import get_memory_manager
 from nanobot.soul.prompt import run_agent_with_soul_and_memory

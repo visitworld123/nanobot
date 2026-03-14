@@ -13,9 +13,9 @@ import json
 import logging
 from typing import Any, Callable
 
-from nanobot.providers.llm_client import deepseek_chat_with_tools
-from nanobot.agent.context import SYSTEM_PROMPT
-from nanobot.agent.tools.definitions import TOOLS_OPENAI, TOOL_HANDLERS, process_tool_call
+from nanobot.llm.llm_client import deepseek_chat_with_tools
+from nanobot.engine.context import SYSTEM_PROMPT
+from nanobot.engine.tools.definitions import TOOLS_OPENAI, TOOL_HANDLERS, process_tool_call
 
 log = logging.getLogger("agent")
 

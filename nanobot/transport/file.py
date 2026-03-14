@@ -8,9 +8,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
-from nanobot.bus.events import InboundMessage
-from nanobot.channels.base import Channel
-from nanobot.utils.helpers import WORKSPACE_DIR
+from nanobot.transport.events import InboundMessage
+from nanobot.transport.base import Channel
+from nanobot.base.helpers import WORKSPACE_DIR
 
 FILE_CHANNEL_INBOX = WORKSPACE_DIR / ".channels" / "file_inbox.txt"
 FILE_CHANNEL_OUTBOX = WORKSPACE_DIR / ".channels" / "file_outbox.txt"

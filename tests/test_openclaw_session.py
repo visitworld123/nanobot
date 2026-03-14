@@ -1,10 +1,10 @@
-"""Tests for nanobot.session.store — SessionStore CRUD operations."""
+"""Tests for nanobot.store.store — SessionStore CRUD operations."""
 
 import json
 import pytest
 from pathlib import Path
 
-from nanobot.session.store import SessionStore
+from nanobot.store.store import SessionStore
 
 
 @pytest.fixture

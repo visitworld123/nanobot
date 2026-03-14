@@ -13,8 +13,8 @@ from __future__ import annotations
 
 import sys
 
-from nanobot.utils.helpers import CYAN, GREEN, YELLOW, DIM, RESET, BOLD, MAGENTA, BLUE
-from nanobot.session.store import SessionStore
+from nanobot.base.helpers import CYAN, GREEN, YELLOW, DIM, RESET, BOLD, MAGENTA, BLUE
+from nanobot.store.store import SessionStore
 
 
 def colored_prompt() -> str:
@@ -39,7 +39,7 @@ def print_agent(agent_id: str) -> None:
 
 def run_basic_repl() -> None:
     """Basic REPL: simple agent loop with session persistence (s03 mode)."""
-    from nanobot.agent.loop import agent_loop
+    from nanobot.engine.loop import agent_loop
 
     session_store = SessionStore()
     session_key = "cli:user:default"
@@ -77,9 +77,9 @@ def run_basic_repl() -> None:
 
 def run_routing_repl() -> None:
     """Routing REPL: test routing logic locally without gateway (s05 mode)."""
-    from nanobot.config.loader import load_routing_config
-    from nanobot.gateway.routing import MessageRouter
-    from nanobot.agent.loop import run_agent_with_tools
+    from nanobot.routing.config import load_routing_config
+    from nanobot.routing.router import MessageRouter
+    from nanobot.engine.loop import run_agent_with_tools
 
     agents, bindings, default_agent, dm_scope = load_routing_config()
     router = MessageRouter(agents, bindings, default_agent, dm_scope)
@@ -132,7 +132,7 @@ def run_soul_memory_repl() -> None:
         create_agents_with_soul_memory,
         run_agent_with_soul_and_memory,
     )
-    from nanobot.gateway.routing import MessageRouter
+    from nanobot.routing.router import MessageRouter
 
     agents, bindings, default_agent, dm_scope = create_agents_with_soul_memory()
     router = MessageRouter(agents, bindings, default_agent, dm_scope)

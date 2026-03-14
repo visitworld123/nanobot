@@ -1,13 +1,13 @@
-"""Tests for nanobot.channels — Channel ABC, CLIChannel, FileChannel, ChannelRegistry."""
+"""Tests for nanobot.transport — Channel ABC, CLIChannel, FileChannel, ChannelRegistry."""
 
 import pytest
 from pathlib import Path
 
-from nanobot.bus.events import InboundMessage
-from nanobot.channels.base import Channel
-from nanobot.channels.cli import CLIChannel
-from nanobot.channels.file import FileChannel
-from nanobot.channels.registry import ChannelRegistry
+from nanobot.transport.events import InboundMessage
+from nanobot.transport.base import Channel
+from nanobot.transport.cli import CLIChannel
+from nanobot.transport.file import FileChannel
+from nanobot.transport.registry import ChannelRegistry
 
 
 class TestInboundMessage:

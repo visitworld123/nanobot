@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from nanobot.utils.helpers import (
+from nanobot.base.helpers import (
     WORKSPACE_DIR, ALLOWED_ROOT, MAX_TOOL_OUTPUT,
     safe_path, truncate, decode_output,
 )

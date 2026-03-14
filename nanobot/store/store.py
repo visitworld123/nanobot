@@ -14,7 +14,7 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-from nanobot.utils.helpers import WORKSPACE_DIR
+from nanobot.base.helpers import WORKSPACE_DIR
 
 SESSIONS_DIR = WORKSPACE_DIR / ".sessions"
 SESSIONS_INDEX = SESSIONS_DIR / "sessions.json"
